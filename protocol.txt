@@ -32,9 +32,7 @@ Function description and example
 
 3) Enquiry card 
 
- ->03 02 00 05 Enquiry card by Idle mode (data=01, means all cards in RF area, data=00 means find 
-
-Idle card) 
+ ->03 02 00 05 Enquiry card by Idle mode (data=01, means all cards in RF area, data=00 means find Idle card) 
 
  <-03 02 01 06 
 

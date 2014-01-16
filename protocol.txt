@@ -1,0 +1,97 @@
+M302 mifare encoder communication protocol 
+
+ 
+
+Data stream format： 
+
+ Data Strea Length (1BYTE) Command (1BYTE) Data D(1-20 BYTEs) CRC(1 BYTE) 
+
+Com port setting ： 
+
+ 9600,8,n,1 
+
+Remark ：in below description 
+
+ -> means Host send data to module 
+
+ <- means module send data to host 
+
+Function description and example 
+
+1) enquiry if module exist or not 
+
+ ->03 12 00 15 (Remark: 03 is length, 12 is command , 00 is data , 15 is CRC) 
+
+ <-02 12 14 
+
+2) active buzzer 
+
+ ->02 13 15 
+
+ <-02 13 15 
+
+3) Enquiry card 
+
+ ->03 02 00 05 Enquiry card by Idle mode (data=01, means all cards in RF area, data=00 means find 
+
+Idle card) 
+
+ <-03 02 01 06 
+
+4) Anticollision 
+
+ ->02 03 05 
+
+ <-06 03 32 78 13 E8 AE (module return card serial number is：327813E8） 
+
+5) select card 
+
+ ->02 04 06 
+
+ <-02 04 06 
+
+6) Stop card 
+
+ ->02 09 0B 
+
+ <-02 09 0B 
+
+7) download keyA or keyB 
+
+ ->0A 0B 00 0F FF FF FF FF FF FF 1E download sector15 KEY 
+
+（Parameter: download mode + sector + key；mode=0, download KeyA; 01 means KeyB） 
+
+ <-02 0B 0D 
+
+8) read data 
+
+ ->03 06 00 09 read block 00（parameter：block） 
+
+ <-12 06 32 78 13 E8 B1 08 04 00 62 63 64 65 66 67 68 69 A6 
+
+9) write data 
+
+ ->13 07 04 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 2E 
+
+write data to block 04(block0 in sector1)（parameter：block+data） 
+
+ <-02 07 09 
+
+10) verify key 
+
+ ->04 05 01 00 0A verify sector 01 password with default KEYA 
+
+ （parameter：sector+verify mode；verify mode：00 -means default KEYA，01 means default KEYB， 
+
+02 means directly KEYA，03 means directly by KEYB） 
+
+ <-02 05 07 
+
+11) block operation 
+
+ ->09 08 01 04 04 00 00 00 01 1B block 04 value add 0x00000001 
+
+(parameter：operation mode+source block address+destination block+ value) 
+
+ <-02 08 0A

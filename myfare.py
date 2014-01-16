@@ -8,7 +8,7 @@ prot = {
     'enquiry_cards_return': '\x03\x02\x01\x06', # got valid card
     'enquiry_no_card_found': '\x02\x01\x03', # no card reachable or invalid
     'enquiry_all_cards': '\x03\x02\x01\x05',
-    'anticollision' : '\x02\x03\x05',
+    'anticollision' : '\x02\x03\x05\x00',
     'select_card' : '\x02\x04\x06',
 }
 
@@ -22,8 +22,11 @@ elif resp == prot['enquiry_cards_return']:
     ser.write(prot['active_buzzer'])
     resp = ser.read(3)
     if resp == prot['active_buzzer']:
-        #print "found card, sending anticollision"
+        print "found card, sending anticollision"
         ser.write(prot['anticollision'])
-        print ser.read(7)
-#        ser.write(prot['active_buzzer'])
-#        ser.read(10)
+        resp = ser.read(7)
+        header = resp.encode('hex')[:4]
+        if header == "0603":
+            print "Card Serial:" + resp[-5:].encode('hex')
+
+ser.close()
